@@ -28,7 +28,7 @@ public class UserRegisterDto {
         }
 
         if (!Pattern.matches(PASSWORD_PATTERN, this.password)) {
-            throw new IllegalArgumentException(PASSWORD_OR_USERNAME_NOT_VALID_MESSAGE);
+            throw new IllegalArgumentException(USERNAME_OR_PASSWORD_NOT_VALID_MESSAGE);
         }
 
         if (!password.equals(confirmPassword)) {

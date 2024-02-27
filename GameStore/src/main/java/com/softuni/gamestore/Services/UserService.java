@@ -5,5 +5,5 @@ public interface UserService {
 
     String loginUser(String[] args);
 
-    String logoutUser(String[] args);
+    String logoutUser();
 }

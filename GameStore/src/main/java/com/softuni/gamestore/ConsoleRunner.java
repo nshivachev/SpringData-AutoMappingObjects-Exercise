@@ -22,16 +22,22 @@ public class ConsoleRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        final String[] input = scanner.nextLine().split("\\|");
-        final String command = input[0];
+        String input = scanner.nextLine();
 
-        final String output = switch (command) {
-            case REGISTER_USER -> userService.registerUser(input);
-            case LOGIN_USER -> userService.loginUser(args);
-            case LOGOUT_USER -> userService.logoutUser(args);
-            default -> COMMAND_NOT_FOUND_MESSAGE;
-        };
+        while (!CLOSE.equalsIgnoreCase(input)) {
+            final String[] arguments = input.split("\\|");
+            final String command = arguments[0];
 
-        System.out.println(output);
+            final String output = switch (command) {
+                case REGISTER_USER -> userService.registerUser(arguments);
+                case LOGIN_USER -> userService.loginUser(arguments);
+                case LOGOUT_USER -> userService.logoutUser();
+                default -> COMMAND_NOT_FOUND_MESSAGE;
+            };
+
+            System.out.println(output);
+
+            input = scanner.nextLine();
+        }
     }
 }
