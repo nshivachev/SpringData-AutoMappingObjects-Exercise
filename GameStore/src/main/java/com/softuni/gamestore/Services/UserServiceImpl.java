@@ -15,7 +15,7 @@ import static com.softuni.gamestore.constants.Validations.USERNAME_OR_PASSWORD_N
 
 @Service
 public class UserServiceImpl implements UserService {
-    private User user;
+    private User loggedUser;
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         final User user = modelMapper.map(userRegisterDto, User.class);
 
         if (userRepository.count() == 0) {
-            user.setIsAdmin(true);
+            user.setAdmin(true);
         }
 
         if (userRepository.existsUserByEmail(userRegisterDto.getEmail())) {
@@ -60,25 +60,30 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> existingUser = userRepository.findByEmail(email);
 
-        if (this.user == null
+        if (this.loggedUser == null
                 && existingUser.isPresent()
                 && existingUser.get().getPassword().equals(userLoginDto.getPassword())) {
-            this.user = existingUser.get();
-            return "Successfully logged in " + this.user.getFullName();
+            this.loggedUser = existingUser.get();
+            return "Successfully logged in " + this.loggedUser.getFullName();
         }
         return USERNAME_OR_PASSWORD_NOT_VALID_MESSAGE;
     }
 
     @Override
     public String logoutUser() {
-        if (this.user == null) {
+        if (this.loggedUser == null) {
             return  "Cannot log out. No user was logged in.";
         }
 
-        final String output = "User " + this.user.getFullName() + " successfully logged out";
+        final String output = "User " + this.loggedUser.getFullName() + " successfully logged out";
 
-        this.user = null;
+        this.loggedUser = null;
 
         return output;
+    }
+
+    @Override
+    public User getLoggedUser() {
+        return this.loggedUser;
     }
 }

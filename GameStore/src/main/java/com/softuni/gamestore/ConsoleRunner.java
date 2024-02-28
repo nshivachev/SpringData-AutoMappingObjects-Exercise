@@ -1,5 +1,6 @@
 package com.softuni.gamestore;
 
+import com.softuni.gamestore.Services.GameService;
 import com.softuni.gamestore.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,10 +15,12 @@ import static com.softuni.gamestore.constants.Validations.COMMAND_NOT_FOUND_MESS
 public class ConsoleRunner implements CommandLineRunner {
     private static final Scanner scanner = new Scanner(System.in);
     private final UserService userService;
+    private final GameService gameService;
 
     @Autowired
-    public ConsoleRunner(UserService userService) {
+    public ConsoleRunner(UserService userService, GameService gameService) {
         this.userService = userService;
+        this.gameService = gameService;
     }
 
     @Override
@@ -32,6 +35,9 @@ public class ConsoleRunner implements CommandLineRunner {
                 case REGISTER_USER -> userService.registerUser(arguments);
                 case LOGIN_USER -> userService.loginUser(arguments);
                 case LOGOUT_USER -> userService.logoutUser();
+                case ADD_GAME -> gameService.addGame(arguments);
+                case EDIT_GAME -> gameService.editGame(arguments);
+                case DELETE_GAME -> gameService.deleteGame(arguments);
                 default -> COMMAND_NOT_FOUND_MESSAGE;
             };
 

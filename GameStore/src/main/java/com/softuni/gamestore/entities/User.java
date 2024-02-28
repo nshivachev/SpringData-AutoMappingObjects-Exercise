@@ -32,7 +32,7 @@ public class User extends BaseEntity {
     private Set<Order> orders;
 
     @Column(name = "is_admin")
-    private Boolean isAdmin;
+    private boolean isAdmin;
 
     public User() {
         this.games = new HashSet<>();
