@@ -3,7 +3,7 @@ package com.softuni.gamestore.Services;
 public interface GameService {
     String addGame(String[] args);
 
-    String editGame(String[] arguments);
+    String editGame(String[] args);
 
-    String deleteGame(String[] arguments);
+    String deleteGame(String[] args);
 }
