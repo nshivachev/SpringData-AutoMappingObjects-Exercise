@@ -6,4 +6,10 @@ public interface GameService {
     String editGame(String[] args);
 
     String deleteGame(String[] args);
+
+    String viewAllGames();
+
+    String viewGameDetails(String[] args);
+
+    String viewOwnedGames();
 }

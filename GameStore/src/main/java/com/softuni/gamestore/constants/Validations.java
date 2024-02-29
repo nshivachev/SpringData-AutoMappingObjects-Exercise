@@ -19,5 +19,9 @@ public enum Validations {
     public static final String GAME_PRICE_NOT_VALID_MESSAGE = "Price should be positive number";
     public static final String GAME_DESCRIPTION_NOT_VALID_MESSAGE = "Description should be at least 20 symbols";
     public static final String GAME_OPERATIONS_MISSING_RIGHTS_MESSAGE = "Missing rights";
-    public static final String NO_SUCH_GAME_ID_MESSAGE = "No game with such an id";
+    public static final String NOT_LOGGED_MESSAGE = "Log into your account";
+
+    public static final String NO_GAME_ID_MESSAGE = "No game found with that id";
+    public static final String NO_GAME_TITLE_MESSAGE = "No game found with that title";
+    public static final String EMPTY_STORE_MESSAGE = "Currently there is no any games in the store";
 }

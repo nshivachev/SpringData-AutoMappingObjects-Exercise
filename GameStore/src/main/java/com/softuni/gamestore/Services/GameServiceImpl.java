@@ -1,6 +1,8 @@
 package com.softuni.gamestore.Services;
 
+import com.softuni.gamestore.dtos.GameDetailsDto;
 import com.softuni.gamestore.dtos.GameDto;
+import com.softuni.gamestore.dtos.GameTitleAndPriceDto;
 import com.softuni.gamestore.entities.Game;
 import com.softuni.gamestore.repositories.GameRepository;
 import jakarta.transaction.Transactional;
@@ -12,9 +14,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import static com.softuni.gamestore.constants.Validations.GAME_OPERATIONS_MISSING_RIGHTS_MESSAGE;
-import static com.softuni.gamestore.constants.Validations.NO_SUCH_GAME_ID_MESSAGE;
+import static com.softuni.gamestore.constants.Validations.*;
 
 @Service
 public class GameServiceImpl implements GameService {
@@ -66,7 +68,7 @@ public class GameServiceImpl implements GameService {
         final long id = Long.parseLong(args[1]);
 
         if (!gameRepository.existsGameById(id)) {
-            return NO_SUCH_GAME_ID_MESSAGE;
+            return NO_GAME_ID_MESSAGE;
         }
 
         Game game = gameRepository.findById(id).get();
@@ -131,7 +133,7 @@ public class GameServiceImpl implements GameService {
         final long id = Long.parseLong(args[1]);
 
         if (!gameRepository.existsGameById(id)) {
-            return NO_SUCH_GAME_ID_MESSAGE;
+            return NO_GAME_ID_MESSAGE;
         }
 
         final String output = "Deleted " + gameRepository.findById(id).get().getTitle();
@@ -139,6 +141,41 @@ public class GameServiceImpl implements GameService {
         gameRepository.deleteGameById(id);
 
         return output;
+    }
+
+    @Override
+    public String viewAllGames() {
+        if (gameRepository.count() == 0) {
+            return EMPTY_STORE_MESSAGE;
+        }
+
+        final StringBuilder result = new StringBuilder();
+
+        gameRepository.findAll().stream()
+                .map(game -> modelMapper.map(game, GameTitleAndPriceDto.class))
+                .forEach(gameDto -> result.append(gameDto.toString()).append(System.lineSeparator()));
+
+        return result.toString().trim();
+    }
+
+    @Override
+    public String viewGameDetails(String[] args) {
+        if (gameRepository.count() == 0) {
+            return EMPTY_STORE_MESSAGE;
+        }
+
+        final Optional<Game> game = gameRepository.findByTitle(args[1]);
+
+        if (game.isEmpty()) {
+            return NO_GAME_TITLE_MESSAGE;
+        }
+
+        return modelMapper.map(game, GameDetailsDto.class).toString();
+    }
+
+    @Override
+    public String viewOwnedGames() {
+        return null;
     }
 
     private static LocalDate parseDate(String date) {
