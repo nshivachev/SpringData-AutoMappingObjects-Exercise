@@ -14,6 +14,9 @@ public class GameDto {
     private String description;
     private LocalDate releaseDate;
 
+    public GameDto() {
+    }
+
     public GameDto(String title, String trailerId, String imageThumbnail, float size, BigDecimal price, String description, LocalDate releaseDate) {
         setTitle(title);
         setTrailerId(trailerId);
@@ -105,5 +108,9 @@ public class GameDto {
 
     public String successfulAddFormat() {
         return "Added " + title;
+    }
+
+    public String successfulEditFormat() {
+        return "Edited " + title;
     }
 }

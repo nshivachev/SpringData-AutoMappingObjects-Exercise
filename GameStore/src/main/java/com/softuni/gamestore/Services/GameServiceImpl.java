@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.softuni.gamestore.constants.Validations.GAME_OPERATIONS_MISSING_RIGHTS_MESSAGE;
 import static com.softuni.gamestore.constants.Validations.NO_SUCH_GAME_ID_MESSAGE;
@@ -38,8 +40,7 @@ public class GameServiceImpl implements GameService {
         String trailer = args[4];
         String thumbnailURL = args[5];
         String description = args[6];
-        int[] dateTokens = Arrays.stream(args[7].split("-")).mapToInt(Integer::parseInt).toArray();
-        LocalDate releaseDate = LocalDate.of(dateTokens[2], dateTokens[1], dateTokens[0]);
+        LocalDate releaseDate = parseDate(args[7]);
 
         final GameDto gameDto;
 
@@ -58,7 +59,66 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public String editGame(String[] args) {
-        return null;
+        if (userService.getLoggedUser() == null || !userService.getLoggedUser().isAdmin()) {
+            return GAME_OPERATIONS_MISSING_RIGHTS_MESSAGE;
+        }
+
+        final long id = Long.parseLong(args[1]);
+
+        if (!gameRepository.existsGameById(id)) {
+            return NO_SUCH_GAME_ID_MESSAGE;
+        }
+
+        Game game = gameRepository.findById(id).get();
+
+        final GameDto gameDto = modelMapper.map(game, GameDto.class);
+
+        final Map<String, String> values = new HashMap<>();
+
+        for (int i = 2; i < args.length; i++) {
+            String key = args[i].split("=")[0];
+            String value = args[i].split("=")[1];
+
+            values.put(key, value);
+        }
+
+        try {
+            values.forEach((key, value) -> {
+                switch (key) {
+                    case "title" -> gameDto.setTitle(value);
+//                        game.setTitle(gameDto.getTitle());
+                    case "price" -> gameDto.setPrice(new BigDecimal(value));
+//                        game.setPrice(gameDto.getPrice());
+                    case "size" -> gameDto.setSize(Float.parseFloat(value));
+//                        game.setSize(gameDto.getSize());
+                    case "trailer" -> gameDto.setTrailerId(value);
+//                        game.setTrailerId(gameDto.getTrailerId());
+                    case "thumbnailURL" -> gameDto.setImageThumbnail(value);
+//                        game.setImageThumbnail(gameDto.getImageThumbnail());
+                    case "description" -> gameDto.setDescription(value);
+//                        game.setDescription(gameDto.getDescription());
+                    case "releaseDate" -> gameDto.setReleaseDate(parseDate(value));
+//                        game.setReleaseDate(gameDto.getReleaseDate());
+                }
+            });
+        } catch (IllegalArgumentException e) {
+            return e.getMessage();
+        }
+
+        gameRepository.updateAllFields(
+                id,
+                gameDto.getTitle(),
+                gameDto.getPrice(),
+                gameDto.getSize(),
+                gameDto.getTrailerId(),
+                gameDto.getImageThumbnail(),
+                gameDto.getDescription(),
+                gameDto.getReleaseDate()
+        );
+
+//        gameRepository.save(game);
+
+        return gameDto.successfulEditFormat();
     }
 
     @Override
@@ -79,5 +139,10 @@ public class GameServiceImpl implements GameService {
         gameRepository.deleteGameById(id);
 
         return output;
+    }
+
+    private static LocalDate parseDate(String date) {
+        int[] dateTokens = Arrays.stream(date.split("-")).mapToInt(Integer::parseInt).toArray();
+        return LocalDate.of(dateTokens[2], dateTokens[1], dateTokens[0]);
     }
 }
