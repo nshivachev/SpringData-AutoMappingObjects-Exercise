@@ -11,6 +11,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -39,4 +40,16 @@ public class Game extends BaseEntity {
 
     @Column(name = "release_date", nullable = false)
     private LocalDate releaseDate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Game game)) return false;
+        return Float.compare(getSize(), game.getSize()) == 0 && Objects.equals(getTitle(), game.getTitle()) && Objects.equals(getTrailerId(), game.getTrailerId()) && Objects.equals(getImageThumbnail(), game.getImageThumbnail()) && Objects.equals(getPrice(), game.getPrice()) && Objects.equals(getDescription(), game.getDescription()) && Objects.equals(getReleaseDate(), game.getReleaseDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTitle(), getTrailerId(), getImageThumbnail(), getSize(), getPrice(), getDescription(), getReleaseDate());
+    }
 }

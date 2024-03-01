@@ -16,6 +16,4 @@ public interface GameService {
     String viewAllGames();
 
     String viewGameDetails(String[] args);
-
-    String viewOwnedGames();
 }

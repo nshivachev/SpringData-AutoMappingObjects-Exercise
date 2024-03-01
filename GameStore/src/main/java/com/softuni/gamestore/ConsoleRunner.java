@@ -43,9 +43,10 @@ public class ConsoleRunner implements CommandLineRunner {
                 case DELETE_GAME -> gameService.deleteGame(arguments);
                 case ALL_GAMES -> gameService.viewAllGames();
                 case DETAIL_GAME -> gameService.viewGameDetails(arguments);
-                case OWNED_GAMES -> gameService.viewOwnedGames();
+                case OWNED_GAMES -> userService.viewOwnedGames();
                 case ADD_ITEM -> orderService.addItem(arguments);
                 case REMOVE_ITEM -> orderService.removeItem(arguments);
+                case BUY_ITEM -> orderService.buyItem();
                 default -> COMMAND_NOT_FOUND_MESSAGE;
             };
 

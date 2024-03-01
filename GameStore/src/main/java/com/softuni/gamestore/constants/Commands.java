@@ -11,7 +11,7 @@ public enum Commands {
     public final static String DELETE_GAME = "DeleteGame";
 
     public final static String ALL_GAMES = "AllGames";
-    public final static String DETAIL_GAME = "DetailGame";
+    public final static String DETAIL_GAME = "DetailsGame";
     public final static String OWNED_GAMES = "OwnedGames";
 
     public final static String ADD_ITEM = "AddItem";

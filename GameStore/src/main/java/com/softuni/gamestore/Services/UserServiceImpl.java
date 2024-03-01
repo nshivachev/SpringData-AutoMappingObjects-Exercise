@@ -1,5 +1,6 @@
 package com.softuni.gamestore.Services;
 
+import com.softuni.gamestore.constants.Validations;
 import com.softuni.gamestore.dtos.UserLoginDto;
 import com.softuni.gamestore.dtos.UserRegisterDto;
 import com.softuni.gamestore.entities.User;
@@ -10,8 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.softuni.gamestore.constants.Validations.EMAIL_ALREADY_EXISTS_MESSAGE;
-import static com.softuni.gamestore.constants.Validations.USERNAME_OR_PASSWORD_NOT_VALID_MESSAGE;
+import static com.softuni.gamestore.constants.Validations.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,8 +30,13 @@ public class UserServiceImpl implements UserService {
     public String registerUser(String[] args) {
         final UserRegisterDto userRegisterDto;
 
+        final String email = args[1];
+        final String password = args[2];
+        final String confirmPassword = args[3];
+        final String fullName = args[4];
+
         try {
-            userRegisterDto = new UserRegisterDto(args[1], args[2], args[3], args[4]);
+            userRegisterDto = new UserRegisterDto(email, password, confirmPassword, fullName);
         } catch (IllegalArgumentException e) {
             return e.getMessage();
         }
@@ -63,16 +68,19 @@ public class UserServiceImpl implements UserService {
         if (this.loggedUser == null
                 && existingUser.isPresent()
                 && existingUser.get().getPassword().equals(userLoginDto.getPassword())) {
+
             this.loggedUser = existingUser.get();
+
             return "Successfully logged in " + this.loggedUser.getFullName();
         }
+
         return USERNAME_OR_PASSWORD_NOT_VALID_MESSAGE;
     }
 
     @Override
     public String logoutUser() {
         if (this.loggedUser == null) {
-            return  "Cannot log out. No user was logged in.";
+            return NOT_LOGGED_USER;
         }
 
         final String output = "User " + this.loggedUser.getFullName() + " successfully logged out";
@@ -85,5 +93,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getLoggedUser() {
         return this.loggedUser;
+    }
+
+    @Override
+    public String viewOwnedGames() {
+        if (loggedUser == null) {
+            return NOT_LOGGED_MESSAGE;
+        }
+
+        StringBuilder result = new StringBuilder();
+
+        loggedUser.getOrders()
+                .forEach(order -> order.getGames()
+                        .forEach(game -> result.append(game.getTitle()).append(System.lineSeparator())));
+
+        return result.toString().trim();
     }
 }

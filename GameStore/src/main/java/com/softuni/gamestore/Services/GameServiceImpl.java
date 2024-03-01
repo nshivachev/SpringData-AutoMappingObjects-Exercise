@@ -156,9 +156,8 @@ public class GameServiceImpl implements GameService {
 
         final StringBuilder result = new StringBuilder();
 
-        gameRepository.findAll().stream()
-                .map(game -> modelMapper.map(game, GameTitleAndPriceDto.class))
-                .forEach(gameDto -> result.append(gameDto.toString()).append(System.lineSeparator()));
+        gameRepository.getAllGamesTitleAndPrice()
+                .forEach(game -> result.append(game).append(System.lineSeparator()));
 
         return result.toString().trim();
     }
@@ -169,18 +168,13 @@ public class GameServiceImpl implements GameService {
             return EMPTY_STORE_MESSAGE;
         }
 
-        final Optional<Game> game = findByTitle(args[1]);
+        final Optional<GameDetailsDto> game = gameRepository.getGameDetailsByTitle(args[1]);
 
         if (game.isEmpty()) {
             return NO_GAME_TITLE_MESSAGE;
         }
 
-        return modelMapper.map(game, GameDetailsDto.class).toString();
-    }
-
-    @Override
-    public String viewOwnedGames() {
-        return null;
+        return game.get().toString();
     }
 
     private static LocalDate parseDate(String date) {

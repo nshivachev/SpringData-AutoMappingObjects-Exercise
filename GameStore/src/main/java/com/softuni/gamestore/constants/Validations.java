@@ -12,6 +12,9 @@ public enum Validations {
     public static final String COMMAND_NOT_FOUND_MESSAGE = "Command not found";
     public static final String EMAIL_ALREADY_EXISTS_MESSAGE = "Email already exists";
 
+    public static final String NOT_LOGGED_USER = "Cannot log out. No user was logged in.";
+    public static final String NOT_LOGGED_MESSAGE = "Log into your account";
+
     public static final String GAME_TITLE_NOT_VALID_MESSAGE = "Not a valid game title";
     public static final String GAME_TRAILER_ID_NOT_VALID_MESSAGE = "Trailer ID should be exactly 11 symbols";
     public static final String GAME_IMAGE_THUMBNAIL_NOT_VALID_MESSAGE = "Link should begin with http:// or https://";
@@ -19,7 +22,7 @@ public enum Validations {
     public static final String GAME_PRICE_NOT_VALID_MESSAGE = "Price should be positive number";
     public static final String GAME_DESCRIPTION_NOT_VALID_MESSAGE = "Description should be at least 20 symbols";
     public static final String GAME_OPERATIONS_MISSING_RIGHTS_MESSAGE = "Missing rights";
-    public static final String NOT_LOGGED_MESSAGE = "Log into your account";
+    public static final String CART_IS_EMPTY = "Cart is empty";
 
     public static final String NO_GAME_ID_MESSAGE = "No game found with that id";
     public static final String NO_GAME_TITLE_MESSAGE = "No game found with that title";
@@ -27,4 +30,5 @@ public enum Validations {
 
     public static final String GAME_EXISTS_INTO_CART = "The game already exists into your cart";
     public static final String GAME_DOESNT_EXIST_INTO_CART = "There is no game with that title into the cart";
+    public static final String ORDER_EXISTS = "The order already exists";
 }
