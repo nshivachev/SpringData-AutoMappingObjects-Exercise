@@ -31,6 +31,11 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public Optional<Game> findByTitle(String title) {
+        return gameRepository.findByTitle(title);
+    }
+
+    @Override
     public String addGame(String[] args) {
         if (userService.getLoggedUser() == null || !userService.getLoggedUser().isAdmin()) {
             return GAME_OPERATIONS_MISSING_RIGHTS_MESSAGE;
@@ -164,7 +169,7 @@ public class GameServiceImpl implements GameService {
             return EMPTY_STORE_MESSAGE;
         }
 
-        final Optional<Game> game = gameRepository.findByTitle(args[1]);
+        final Optional<Game> game = findByTitle(args[1]);
 
         if (game.isEmpty()) {
             return NO_GAME_TITLE_MESSAGE;

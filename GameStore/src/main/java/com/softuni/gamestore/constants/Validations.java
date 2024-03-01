@@ -24,4 +24,7 @@ public enum Validations {
     public static final String NO_GAME_ID_MESSAGE = "No game found with that id";
     public static final String NO_GAME_TITLE_MESSAGE = "No game found with that title";
     public static final String EMPTY_STORE_MESSAGE = "Currently there is no any games in the store";
+
+    public static final String GAME_EXISTS_INTO_CART = "The game already exists into your cart";
+    public static final String GAME_DOESNT_EXIST_INTO_CART = "There is no game with that title into the cart";
 }

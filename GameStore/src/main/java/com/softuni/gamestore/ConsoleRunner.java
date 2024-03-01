@@ -1,6 +1,7 @@
 package com.softuni.gamestore;
 
 import com.softuni.gamestore.Services.GameService;
+import com.softuni.gamestore.Services.OrderService;
 import com.softuni.gamestore.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,11 +17,13 @@ public class ConsoleRunner implements CommandLineRunner {
     private static final Scanner scanner = new Scanner(System.in);
     private final UserService userService;
     private final GameService gameService;
+    private final OrderService orderService;
 
     @Autowired
-    public ConsoleRunner(UserService userService, GameService gameService) {
+    public ConsoleRunner(UserService userService, GameService gameService, OrderService orderService) {
         this.userService = userService;
         this.gameService = gameService;
+        this.orderService = orderService;
     }
 
     @Override
@@ -41,6 +44,8 @@ public class ConsoleRunner implements CommandLineRunner {
                 case ALL_GAMES -> gameService.viewAllGames();
                 case DETAIL_GAME -> gameService.viewGameDetails(arguments);
                 case OWNED_GAMES -> gameService.viewOwnedGames();
+                case ADD_ITEM -> orderService.addItem(arguments);
+                case REMOVE_ITEM -> orderService.removeItem(arguments);
                 default -> COMMAND_NOT_FOUND_MESSAGE;
             };
 
